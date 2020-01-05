@@ -1,0 +1,47 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <title>Task App - {{title}}</title>
+</head>
+<style>
+
+  body {
+    background-color: rgb(70, 70, 150);
+  }
+
+  .modal-body {
+    background-color: rgb(217, 219, 223);
+  }
+  
+</style>
+<body>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{title}}</h5>
+      </div>
+      <div class="modal-body">
+          <form action="">
+              <div class="form-group">
+                <label for="">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="" aria-describedby="helpId">
+              </div>
+              <div class="form-group">
+                <label for="">Email Address</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="">
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Sign up</button>
+        <a class="btn btn-secondary" href="/login">Login</a>
+      </div>
+    </div>
+  </div>
+</body>

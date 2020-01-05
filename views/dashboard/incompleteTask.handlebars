@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3" id="taskCards">
+
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/task/plugins/toast/toastr.min.js"></script>
+<script>
+  
+  $( document ).ready( taskDetails );
+
+  function taskDetails() {
+      $.post('/task/incompleteTasks', { 
+
+        },
+         function(resp) {
+          var data = JSON.parse(resp).data 
+          var taskList = ''
+          for(i = 0; i < data.length; i++) {
+            taskList = taskList + 
+            `<div class="col mb-4">
+              <div class="card shadow-sm">
+                <div class="card-header">
+                  <h1></h1>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Task Description</h5>
+                  <p class="card-text">${data[i].task}</p>
+                </div>
+              </div>
+            </div>`
+          }
+          if(JSON.parse(resp).status == "success") {
+            $('#taskCards').html(taskList)
+            toastr.success(JSON.parse(resp).info)           
+          } else {
+            $('#taskCards').html(taskList)
+            toastr.error(JSON.parse(resp).info)
+          }
+      });
+    
+  }
+
+</script>
