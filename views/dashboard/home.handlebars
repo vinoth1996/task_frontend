@@ -7,17 +7,12 @@
   <div class="row row-cols-1 row-cols-md-3" id="taskCards">
 
   </div>
+
 </div>
 
 <div class="modal" id="addTaskModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      {{!-- <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div> --}}
       <div class="modal-body">
         <form>
           <div class="form-group">
@@ -48,7 +43,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" onclick="addNewTask()">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -91,6 +86,23 @@
           }
       });
     
+  }
+
+  function addNewTask() {
+    $.post('/task/addTask', {
+      task: $('#task-description').val(),
+      dueDate: '',
+      status: $('#status').val(),
+      category: $('#category').val()
+    },
+    function(resp) {
+      if(JSON.parse(resp).status == "success") {
+        toastr.success(JSON.parse(resp).info)
+      } else {
+        toastr.error(JSON.parse(resp).info)
+      }
+      window.location.reload();
+    });
   }
 
 </script>

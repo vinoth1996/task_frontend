@@ -1,6 +1,52 @@
 <div class="container">
+
+  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTaskModal" style="width:35%"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;Add Task</button>
+  </div>
+
   <div class="row row-cols-1 row-cols-md-3" id="taskCards">
 
+  </div>
+
+</div>
+
+<div class="modal" id="addTaskModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="task-description" class="col-form-label">Task Description:</label>
+            <textarea class="form-control" id="task-description"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="task-category" class="col-form-label">Category:</label><br />
+            <select type="text" id="category" class="form-control">
+              <option>Personal</option>
+              <option>Work</option>
+              <option>Shopping</option>
+              <option>Others</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="task-due" class="col-form-label">Due Date:</label><br />
+            <input type="date" id="dueDate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="task-status" class="col-form-label">Status:</label><br />
+            <select type="text" id="status" class="form-control">
+              <option>New</option>
+              <option>In Progress</option>
+              <option>Completed</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="addNewTask()">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -41,5 +87,22 @@
       });
     
   }
+
+  function addNewTask() {
+    $.post('/task/addTask', {
+      task: $('#task-description').val(),
+      dueDate: '',
+      status: $('#status').val(),
+      category: $('#category').val()
+    },
+    function(resp) {
+      if(JSON.parse(resp).status == "success") {
+        toastr.success(JSON.parse(resp).info)
+      } else {
+        toastr.error(JSON.parse(resp).info)
+      }
+      window.location.reload();
+    });
+  }  
 
 </script>

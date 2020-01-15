@@ -2,6 +2,36 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 
+router.post('/addTask', (req, res) => {
+    const body = req.body;
+    var jsonResp = {}
+    var options = {
+        uri: 'http://localhost:8000/newTask',
+        method: 'POST',
+        json: {
+            "Task": body.task,
+            "DueDate": body.dueDate, 
+            "Category": body.category, 
+            "Status": body.status, 
+            "UserId": req.session.userId
+        } 
+    }
+
+    var r = request.post(options, function(err, resp) {
+        // console.log(resp.body.data.EmailId);
+        if(resp.body.status == "success") {
+            jsonResp.status = resp.body.status
+            jsonResp.info = resp.body.info
+            jsonResp.data = resp.body.data
+            res.send(JSON.stringify(jsonResp));
+        } else {
+            jsonResp.status = resp.body.status
+            jsonResp.info = resp.body.info
+            res.send(JSON.stringify(jsonResp));
+        }
+    })    
+});
+
 router.post('/login', function(req, res){
     const body = req.body;
     // console.log("session " + JSON.stringify(req.session))
@@ -24,6 +54,7 @@ router.post('/login', function(req, res){
             jsonResp.info = resp.body.info
             req.session.userName = resp.body.data.UserName
             req.session.EmailId = resp.body.data.EmailId
+            req.session.userId = resp.body.data.id
             res.send(JSON.stringify(jsonResp));
         } else {
             jsonResp.status = resp.body.status
@@ -48,7 +79,7 @@ router.get('/dashboard', function(req, res){
 router.post('/allTask', function(req, res){
     var jsonResp = {};
     var options = {
-        uri: 'http://localhost:8000/allTask/1',
+        uri: 'http://localhost:8000/allTask/'+req.session.userId,
         method: 'GET'
     }
     var r = request.get(options, function(err, resp) {
@@ -71,7 +102,7 @@ router.post('/allTask', function(req, res){
 router.post('/incompleteTasks', function(req, res){
     var jsonResp = {};
     var options = {
-        uri: 'http://localhost:8000/taskBasedOnStatus/1/InProgress',
+        uri: 'http://localhost:8000/taskBasedOnStatus/'+req.session.userId+'/In Progress',
         method: 'GET'
     }
     var r = request.get(options, function(err, resp) {
@@ -102,7 +133,7 @@ router.get('/incompleteTask', (req, res) => {
 router.post('/completedTasks', function(req, res){
     var jsonResp = {};
     var options = {
-        uri: 'http://localhost:8000/taskBasedOnStatus/1/completed',
+        uri: 'http://localhost:8000/taskBasedOnStatus/'+req.session.userId+'/Completed',
         method: 'GET'
     }
     var r = request.get(options, function(err, resp) {
